@@ -1,10 +1,15 @@
+import os, sys
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons", 
+                     [Item('torch', 'light up the way')]
+                    ),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -49,3 +54,80 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+player = Player('Nate', room['outside'])
+clear = 'cls' if 'win' in sys.platform else 'clear'
+
+while True:
+    os.system(clear)
+    print(f'Room: {player.current_room.name}')
+    print()
+    print(f'Description: {player.current_room.description}')
+    print()
+    player.current_room.viewContents()
+
+    cmd = input('> ').strip().lower()
+    os.system(clear)
+
+    if cmd in ['n','e','s','w']:
+        if cmd == 'n' and player.current_room.n_to:
+            player.current_room = player.current_room.n_to
+        elif cmd == 'e' and player.current_room.e_to:
+            player.current_room = player.current_room.e_to
+        elif cmd == 's' and player.current_room.s_to:
+            player.current_room = player.current_room.s_to
+        elif cmd == 'w' and player.current_room.w_to:
+            player.current_room = player.current_room.w_to
+        else:
+            print('Error: There is no room there!')
+            print()
+            input('press ENTER to continue')
+        continue
+    
+    if cmd in ['i', 'inventory']:
+        player.viewInventory()
+        print()
+        input('press ENTER to continue')
+        continue
+    
+    if len((cmds := cmd.split(' '))) == 2:
+        if cmds[0] == 'get':
+            item = cmds[1]
+            obtained = None
+
+            for i, _item in enumerate(player.current_room.items):
+                if item == _item.name:
+                    obtained = player.current_room.items.pop(i)
+                    break
+
+            if obtained:
+                player.inventory.append(obtained)
+                obtained.on_take()
+            else:
+                print('Error: that item does not exist in this room')
+
+        elif cmds[0] == 'drop':
+            item = cmds[1]
+            dropped = None
+            for i, _item in enumerate(player.inventory):
+                if item == _item.name:
+                    dropped = player.inventory.pop(i)
+                    break
+            
+            if dropped:
+                dropped.on_drop()
+            else:
+                print('Error: that item is not in the inventory')
+
+        else:
+            print(f'Error: action "{cmds[0]}" not found...')
+
+        print()
+        input('press ENTER to continue')
+        continue
+
+            
+    if cmd in ['q', 'quit', 'exit']:
+        quit()
+
+    print(f'Error: command "{cmd}" is invalid')
