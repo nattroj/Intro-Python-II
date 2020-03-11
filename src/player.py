@@ -14,5 +14,5 @@ class Player:
             print()
             return
 
-        print("\n".join(map(lambda x: x.name, self.inventory)))
+        print("\n".join(map(lambda x: f'{x.name}: {x.description}', self.inventory)))
         print()
