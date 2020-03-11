@@ -13,3 +13,4 @@ class Room:
 
     def viewContents(self):
         print(f'Contents: {", ".join(map(lambda x: x.name, self.items))}')
+        print()
