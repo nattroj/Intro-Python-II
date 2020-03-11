@@ -55,8 +55,16 @@ room['treasure'].s_to = room['narrow']
 #
 # If the user enters "q", quit the game.
 
-player = Player('Nate', room['outside'])
 clear = 'cls' if 'win' in sys.platform else 'clear'
+os.system(clear)
+player_name = input('Enter your name: ')
+player = Player(player_name, room['outside'])
+
+os.system(clear)
+print(f'Welcome, {player.name}!')
+print()
+print('press ENTER to continue')
+input()
 
 while True:
     os.system(clear)
@@ -66,7 +74,7 @@ while True:
     print()
     player.current_room.viewContents()
 
-    cmd = input('> ').strip().lower()
+    cmd = input('command> ').strip().lower()
     os.system(clear)
 
     if cmd in ['n','e','s','w']:
