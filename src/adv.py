@@ -8,7 +8,6 @@ from item import Item
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons", 
-                     [Item('torch', 'light up the way')]
                     ),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
@@ -26,7 +25,6 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -37,6 +35,18 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+
+torch = Item('torch', 'light up the way')
+sword = Item('sword', 'cut things')
+shield = Item('shield', 'block thangs')
+towel = Item('towel', 'wipe stuff')
+gold_coin = Item('goldcoin', 'buy stuffs')
+
+room['outside'].addItem(torch)
+room['foyer'].addItem(sword)
+room['foyer'].addItem(shield)
+room['overlook'].addItem(towel)
+room['treasure'].addItem(gold_coin)
 
 #
 # Main
@@ -59,8 +69,8 @@ clear = 'cls' if 'win' in sys.platform else 'clear'
 os.system(clear)
 player_name = input('Enter your name: ')
 player = Player(player_name, room['outside'])
-
 os.system(clear)
+
 print(f'Welcome, {player.name}!')
 print()
 print('press ENTER to continue')
