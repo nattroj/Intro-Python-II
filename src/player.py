@@ -10,6 +10,7 @@ class Player:
     def move(self, direction):
         if room := getattr(self.current_room, f'{direction}_to'):
             self.current_room = room
+            print(f'{self.name} has moved to: {self.current_room.name}.')
         else:
             print('Error: There is no room there!')
     
